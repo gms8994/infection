@@ -192,6 +192,8 @@ final class Container extends DIContainer
 
     public const DEFAULT_HTML_LOGGER_PATH = null;
 
+    public const DEFAULT_PITEST_LOGGER_PATH = null;
+
     public const DEFAULT_USE_NOOP_MUTATORS = false;
 
     public const DEFAULT_EXECUTE_ONLY_COVERING_TEST_CASES = false;
@@ -585,6 +587,7 @@ final class Container extends DIContainer
         ?bool $useGitHubLogger = self::DEFAULT_USE_GITHUB_LOGGER,
         ?string $gitlabLogFilePath = self::DEFAULT_GITLAB_LOGGER_PATH,
         ?string $htmlLogFilePath = self::DEFAULT_HTML_LOGGER_PATH,
+        ?string $pitestLogFilePath = self::DEFAULT_PITEST_LOGGER_PATH,
         bool $useNoopMutators = self::DEFAULT_USE_NOOP_MUTATORS,
         bool $executeOnlyCoveringTestCases = self::DEFAULT_EXECUTE_ONLY_COVERING_TEST_CASES,
         ?string $mapSourceClassToTestStrategy = self::DEFAULT_MAP_SOURCE_CLASS_TO_TEST_STRATEGY,
@@ -658,6 +661,7 @@ final class Container extends DIContainer
                 $useGitHubLogger,
                 $gitlabLogFilePath,
                 $htmlLogFilePath,
+                $pitestLogFilePath,
                 $useNoopMutators,
                 $executeOnlyCoveringTestCases,
                 $mapSourceClassToTestStrategy,

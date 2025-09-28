@@ -115,6 +115,7 @@ trait ConfigurationAssertions
             $expectedLogs->getUseGitHubAnnotationsLogger(),
             $expectedLogs->getStrykerConfig(),
             $expectedLogs->getSummaryJsonLogFilePath(),
+            $expectedLogs->getPiTestLogFilePath(),
         );
         $this->assertSame($expectedLogVerbosity, $configuration->getLogVerbosity(), 'Failed logVerbosity check');
         $this->assertSame($expectedTmpDir, $configuration->getTmpDir(), 'Failed tmpDir check');

@@ -127,6 +127,7 @@ final class SchemaConfigurationTest extends TestCase
                 true,
                 StrykerConfig::forFullReport('master'),
                 'summary.json',
+                'pitest.xml',
             ),
             'tmpDir' => 'path/to/tmp',
             'phpUnit' => new PhpUnit('dist/phpunit', 'bin/phpunit'),

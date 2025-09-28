@@ -116,6 +116,10 @@ class FileLoggerFactory
             yield $logConfig->getSummaryJsonLogFilePath() => $this->createSummaryJsonLogger();
         }
 
+        if ($logConfig->getPiTestLogFilePath() !== null) {
+            yield $logConfig->getPiTestLogFilePath() => $this->createPiTestLogger();
+        }
+
         if ($logConfig->getUseGitHubAnnotationsLogger()) {
             yield GitHubAnnotationsLogger::DEFAULT_OUTPUT => $this->createGitHubAnnotationsLogger();
         }
@@ -193,5 +197,13 @@ class FileLoggerFactory
     private function createSummaryJsonLogger(): LineMutationTestingResultsLogger
     {
         return new SummaryJsonLogger($this->metricsCalculator);
+    }
+
+    private function createPiTestLogger(): LineMutationTestingResultsLogger
+    {
+        return new PiTestLogger(
+            $this->metricsCalculator,
+            $this->resultsCollector,
+        );
     }
 }

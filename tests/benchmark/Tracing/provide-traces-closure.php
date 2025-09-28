@@ -73,7 +73,7 @@ $container = Container::create()->withValues(
     Container::DEFAULT_USE_GITHUB_LOGGER,
     Container::DEFAULT_GITLAB_LOGGER_PATH,
     Container::DEFAULT_HTML_LOGGER_PATH,
-    true,
+    Container::DEFAULT_PITEST_LOGGER_PATH,
     Container::DEFAULT_EXECUTE_ONLY_COVERING_TEST_CASES,
     Container::DEFAULT_MAP_SOURCE_CLASS_TO_TEST_STRATEGY,
     Container::DEFAULT_LOGGER_PROJECT_ROOT_DIRECTORY,

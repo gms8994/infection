@@ -117,6 +117,7 @@ class ConfigurationFactory
         ?bool $useGitHubLogger,
         ?string $gitlabLogFilePath,
         ?string $htmlLogFilePath,
+        ?string $pitestLogFilePath,
         bool $useNoopMutators,
         bool $executeOnlyCoveringTestCases,
         ?string $mapSourceClassToTestStrategy,
@@ -155,7 +156,7 @@ class ConfigurationFactory
             ),
             $this->retrieveFilter($filter, $gitDiffFilter, $isForGitDiffLines, $gitDiffBase, $schema->getSource()->getDirectories()),
             $schema->getSource()->getExcludes(),
-            $this->retrieveLogs($schema->getLogs(), $configDir, $useGitHubLogger, $gitlabLogFilePath, $htmlLogFilePath),
+            $this->retrieveLogs($schema->getLogs(), $configDir, $useGitHubLogger, $gitlabLogFilePath, $htmlLogFilePath, $pitestLogFilePath),
             $logVerbosity,
             $namespacedTmpDir,
             $this->retrievePhpUnit($schema, $configDir),
@@ -364,7 +365,7 @@ class ConfigurationFactory
         return $this->gitDiffFileProvider->provide($gitDiffFilter, $baseBranch, $sourceDirectories);
     }
 
-    private function retrieveLogs(Logs $logs, string $configDir, ?bool $useGitHubLogger, ?string $gitlabLogFilePath, ?string $htmlLogFilePath): Logs
+    private function retrieveLogs(Logs $logs, string $configDir, ?bool $useGitHubLogger, ?string $gitlabLogFilePath, ?string $htmlLogFilePath, ?string $pitestLogFilePath): Logs
     {
         if ($useGitHubLogger === null) {
             $useGitHubLogger = $this->detectCiGithubActions();
@@ -382,6 +383,10 @@ class ConfigurationFactory
             $logs->setHtmlLogFilePath($htmlLogFilePath);
         }
 
+        if ($pitestLogFilePath !== null) {
+            $logs->setPiTestLogFilePath($pitestLogFilePath);
+        }
+
         return new Logs(
             self::pathToAbsolute($logs->getTextLogFilePath(), $configDir),
             self::pathToAbsolute($logs->getHtmlLogFilePath(), $configDir),
@@ -393,6 +398,7 @@ class ConfigurationFactory
             $logs->getUseGitHubAnnotationsLogger(),
             $logs->getStrykerConfig(),
             self::pathToAbsolute($logs->getSummaryJsonLogFilePath(), $configDir),
+            self::pathToAbsolute($logs->getPiTestLogFilePath(), $configDir),
         );
     }
 

@@ -52,6 +52,7 @@ class Logs
         private bool $useGitHubAnnotationsLogger,
         private readonly ?StrykerConfig $strykerConfig,
         private readonly ?string $summaryJsonLogFilePath,
+        private ?string $pitestLogFilePath,
     ) {
     }
 
@@ -66,6 +67,7 @@ class Logs
             null,
             null,
             false,
+            null,
             null,
             null,
         );
@@ -89,6 +91,16 @@ class Logs
     public function setHtmlLogFilePath(string $htmlLogFilePath): void
     {
         $this->htmlLogFilePath = $htmlLogFilePath;
+    }
+
+    public function setPiTestLogFilePath(string $pitestLogFilePath): void
+    {
+        $this->pitestLogFilePath = $pitestLogFilePath;
+    }
+
+    public function getPiTestLogFilePath(): ?string
+    {
+        return $this->pitestLogFilePath;
     }
 
     public function getSummaryLogFilePath(): ?string

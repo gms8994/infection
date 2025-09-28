@@ -243,6 +243,7 @@ final class ConfigurationTest extends TestCase
                 true,
                 StrykerConfig::forBadge('master'),
                 'summary.json',
+                'pitest.xml',
             ),
             'default',
             'custom-dir',

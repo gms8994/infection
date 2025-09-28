@@ -58,6 +58,7 @@ final class LogsTest extends TestCase
         bool $useGitHubAnnotationsLogger,
         ?StrykerConfig $strykerConfig,
         ?string $summaryJsonLogFilePath,
+        ?string $pitestLogFilePath,
     ): void {
         $logs = new Logs(
             $textLogFilePath,
@@ -70,6 +71,7 @@ final class LogsTest extends TestCase
             $useGitHubAnnotationsLogger,
             $strykerConfig,
             $summaryJsonLogFilePath,
+            $pitestLogFilePath,
         );
 
         $this->assertLogsStateIs(
@@ -84,6 +86,7 @@ final class LogsTest extends TestCase
             $useGitHubAnnotationsLogger,
             $strykerConfig,
             $summaryJsonLogFilePath,
+            $pitestLogFilePath,
         );
     }
 
@@ -103,6 +106,7 @@ final class LogsTest extends TestCase
             false,
             null,
             null,
+            null,
         );
     }
 
@@ -119,6 +123,7 @@ final class LogsTest extends TestCase
             false,
             null,
             null,
+            null,
         ];
 
         yield 'complete' => [
@@ -132,6 +137,7 @@ final class LogsTest extends TestCase
             true,
             StrykerConfig::forBadge('master'),
             'summary.json',
+            'pitest.xml',
         ];
     }
 }
