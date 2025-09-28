@@ -50,6 +50,7 @@ use Infection\Logger\Html\StrykerHtmlReportBuilder;
 use Infection\Logger\JsonLogger;
 use Infection\Logger\MutationTestingResultsLogger;
 use Infection\Logger\PerMutatorLogger;
+use Infection\Logger\PiTestLogger;
 use Infection\Logger\SummaryFileLogger;
 use Infection\Logger\SummaryJsonLogger;
 use Infection\Logger\TextFileLogger;
@@ -111,6 +112,7 @@ final class FileLoggerFactoryTest extends TestCase
                 true,
                 null,
                 '/a/file',
+                '/a/file',
             ),
         );
 
@@ -152,6 +154,7 @@ final class FileLoggerFactoryTest extends TestCase
                 false,
                 null,
                 null,
+                null,
             ),
             [TextFileLogger::class],
         ];
@@ -166,6 +169,7 @@ final class FileLoggerFactoryTest extends TestCase
                 null,
                 null,
                 false,
+                null,
                 null,
                 null,
             ),
@@ -184,6 +188,7 @@ final class FileLoggerFactoryTest extends TestCase
                 false,
                 null,
                 null,
+                null,
             ),
             [SummaryFileLogger::class],
         ];
@@ -198,6 +203,7 @@ final class FileLoggerFactoryTest extends TestCase
                 'debug_file',
                 null,
                 false,
+                null,
                 null,
                 null,
             ),
@@ -216,6 +222,7 @@ final class FileLoggerFactoryTest extends TestCase
                 false,
                 null,
                 null,
+                null,
             ),
             [JsonLogger::class],
         ];
@@ -230,6 +237,7 @@ final class FileLoggerFactoryTest extends TestCase
                 null,
                 null,
                 false,
+                null,
                 null,
                 null,
             ),
@@ -248,6 +256,7 @@ final class FileLoggerFactoryTest extends TestCase
                 false,
                 null,
                 null,
+                null,
             ),
             [PerMutatorLogger::class],
         ];
@@ -262,6 +271,7 @@ final class FileLoggerFactoryTest extends TestCase
                 null,
                 null,
                 true,
+                null,
                 null,
                 null,
             ),
@@ -280,6 +290,7 @@ final class FileLoggerFactoryTest extends TestCase
                 false,
                 null,
                 'summary-json',
+                null,
             ),
             [SummaryJsonLogger::class],
         ];
@@ -296,6 +307,7 @@ final class FileLoggerFactoryTest extends TestCase
                 true,
                 StrykerConfig::forBadge('branch'),
                 'summary-json',
+                'pitest',
             ),
             [
                 TextFileLogger::class,
@@ -306,6 +318,7 @@ final class FileLoggerFactoryTest extends TestCase
                 DebugFileLogger::class,
                 PerMutatorLogger::class,
                 SummaryJsonLogger::class,
+                PiTestLogger::class,
                 GitHubAnnotationsLogger::class,
             ],
         ];

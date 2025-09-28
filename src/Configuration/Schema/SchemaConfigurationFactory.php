@@ -96,6 +96,7 @@ class SchemaConfigurationFactory
             $logs->github ?? false,
             self::createStrykerConfig($logs->stryker ?? null),
             self::normalizeString($logs->summaryJson ?? null),
+            self::normalizeString($logs->pitest ?? null),
         );
     }
 

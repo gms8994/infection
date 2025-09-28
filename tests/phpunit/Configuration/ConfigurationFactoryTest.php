@@ -112,6 +112,7 @@ final class ConfigurationFactoryTest extends TestCase
                 false,
                 null,
                 null,
+                null,
             ),
             '',
             new PhpUnit(null, null),
@@ -153,6 +154,7 @@ final class ConfigurationFactoryTest extends TestCase
         ?bool $inputUseGitHubAnnotationsLogger = true,
         ?string $inputGitlabLogFilePath = null,
         ?string $inputHtmlLogFilePath = null,
+        ?string $inputPitestLogFilePath = null,
         bool $inputUseNoopMutators = false,
         int $inputMsiPrecision = 2,
         int $expectedTimeout = 10,
@@ -226,6 +228,7 @@ final class ConfigurationFactoryTest extends TestCase
                 $inputUseGitHubAnnotationsLogger,
                 $inputGitlabLogFilePath,
                 $inputHtmlLogFilePath,
+                $inputPitestLogFilePath,
                 $inputUseNoopMutators,
                 $inputExecuteOnlyCoveringTestCases,
                 $mapSourceClassToTest,
@@ -333,6 +336,7 @@ final class ConfigurationFactoryTest extends TestCase
                 false,
                 'master',
                 false,
+                null,
                 null,
                 null,
                 false,
@@ -932,6 +936,7 @@ final class ConfigurationFactoryTest extends TestCase
                     true,
                     StrykerConfig::forFullReport('master'),
                     '/summary.json',
+                    '/pitest.xml',
                 ),
                 'config/tmp',
                 new PhpUnit(
@@ -996,6 +1001,7 @@ final class ConfigurationFactoryTest extends TestCase
                 true,
                 StrykerConfig::forFullReport('master'),
                 '/summary.json',
+                '/pitest.xml',
             ),
             'expectedLogVerbosity' => 'none',
             'expectedTmpDir' => '/path/to/config/tmp/infection',
@@ -1044,6 +1050,7 @@ final class ConfigurationFactoryTest extends TestCase
                     null,
                     null,
                     false,
+                    null,
                     null,
                     null,
                 ),
@@ -1197,6 +1204,7 @@ final class ConfigurationFactoryTest extends TestCase
             $useGitHubAnnotationsLogger,
             null,
             null,
+            null,
         );
 
         return [
@@ -1222,6 +1230,7 @@ final class ConfigurationFactoryTest extends TestCase
             true,
             null,
             null,
+            null,
         );
 
         return [
@@ -1240,6 +1249,7 @@ final class ConfigurationFactoryTest extends TestCase
                     null,
                     null,
                     false,
+                    null,
                     null,
                     null,
                 ),
@@ -1633,6 +1643,7 @@ final class ConfigurationFactoryTest extends TestCase
             true,
             null,
             null,
+            null,
         );
 
         return [
@@ -1651,6 +1662,7 @@ final class ConfigurationFactoryTest extends TestCase
                     null,
                     null,
                     false,
+                    null,
                     null,
                     null,
                 ),
