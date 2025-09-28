@@ -2774,6 +2774,7 @@ final class SchemaConfigurationFactoryTest extends TestCase
             'bootstrap' => null,
             'initialTestsPhpOptions' => null,
             'testFrameworkOptions' => null,
+            'staticAnalysisToolOptions' => null,
             'threadCount' => null,
             'staticAnalysisTool' => null,
         ];

@@ -90,6 +90,9 @@ final class RunCommand extends BaseCommand
     private const OPTION_TEST_FRAMEWORK_OPTIONS = 'test-framework-options';
 
     /** @var string */
+    private const OPTION_STATIC_ANALYSIS_TOOL_OPTIONS = 'static-analysis-tool-options';
+
+    /** @var string */
     private const OPTION_WITH_UNCOVERED = 'with-uncovered';
 
     /** @var string */
@@ -192,6 +195,13 @@ final class RunCommand extends BaseCommand
                 InputOption::VALUE_REQUIRED,
                 'Options to be passed to the test framework',
                 Container::DEFAULT_TEST_FRAMEWORK_EXTRA_OPTIONS,
+            )
+            ->addOption(
+                self::OPTION_STATIC_ANALYSIS_TOOL_OPTIONS,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Options to be passed to the static analysis tool',
+                Container::DEFAULT_STATIC_ANALYSIS_TOOL_OPTIONS,
             )
             ->addOption(
                 self::OPTION_THREADS,
@@ -458,6 +468,7 @@ final class RunCommand extends BaseCommand
         $testFramework = trim((string) $input->getOption(self::OPTION_TEST_FRAMEWORK));
         $testFrameworkExtraOptions = trim((string) $input->getOption(self::OPTION_TEST_FRAMEWORK_OPTIONS));
         $staticAnalysisTool = trim((string) $input->getOption(self::OPTION_STATIC_ANALYSIS_TOOL));
+        $staticAnalysisToolOptions = trim((string) $input->getOption(self::OPTION_STATIC_ANALYSIS_TOOL_OPTIONS));
         $initialTestsPhpOptions = trim((string) $input->getOption(self::OPTION_INITIAL_TESTS_PHP_OPTIONS));
         $gitlabFileLogPath = trim((string) $input->getOption(self::OPTION_LOGGER_GITLAB));
         $htmlFileLogPath = trim((string) $input->getOption(self::OPTION_LOGGER_HTML));
@@ -488,18 +499,37 @@ final class RunCommand extends BaseCommand
         $gitDiffBase = $input->getOption(self::OPTION_GIT_DIFF_BASE);
 
         if ($isForGitDiffLines && $gitDiffFilter !== Container::DEFAULT_GIT_DIFF_FILTER) {
-            throw new InvalidArgumentException(sprintf('Cannot pass both "--%s" and "--%s" options: use none or only one of them', self::OPTION_GIT_DIFF_LINES, self::OPTION_GIT_DIFF_FILTER));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The options "--%s" and "--%s" are mutually exclusive. Please use only one of them.',
+                    self::OPTION_GIT_DIFF_LINES,
+                    self::OPTION_GIT_DIFF_FILTER,
+                ),
+            );
         }
 
         if ($gitDiffBase !== Container::DEFAULT_GIT_DIFF_BASE && $gitDiffFilter === Container::DEFAULT_GIT_DIFF_FILTER && $isForGitDiffLines === Container::DEFAULT_GIT_DIFF_LINES) {
-            throw new InvalidArgumentException(sprintf('Cannot pass "--%s" without "--%s"', self::OPTION_GIT_DIFF_BASE, self::OPTION_GIT_DIFF_FILTER));
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The option "--%s" cannot be used without the option "--%s" or "--%s".',
+                    self::OPTION_GIT_DIFF_BASE,
+                    self::OPTION_GIT_DIFF_LINES,
+                    self::OPTION_GIT_DIFF_FILTER,
+                ),
+            );
         }
 
         $filter = trim((string) $input->getOption(self::OPTION_FILTER));
 
         if ($filter !== '' && $gitDiffFilter !== Container::DEFAULT_GIT_DIFF_BASE) {
             throw new InvalidArgumentException(
-                sprintf('Cannot pass both "--%s" and "--%s" options: use none or only one of them', self::OPTION_FILTER, self::OPTION_GIT_DIFF_FILTER),
+                sprintf(
+                    'The options "--%s" and "--%s" are mutually exclusive. Use "--%s" for regular filtering or "--%s" for Git-based filtering.',
+                    self::OPTION_FILTER,
+                    self::OPTION_GIT_DIFF_FILTER,
+                    self::OPTION_FILTER,
+                    self::OPTION_GIT_DIFF_FILTER,
+                ),
             );
         }
 
@@ -540,6 +570,9 @@ final class RunCommand extends BaseCommand
             $testFrameworkExtraOptions === ''
                 ? Container::DEFAULT_TEST_FRAMEWORK_EXTRA_OPTIONS
                 : $testFrameworkExtraOptions,
+            $staticAnalysisToolOptions === ''
+                ? Container::DEFAULT_STATIC_ANALYSIS_TOOL_OPTIONS
+                : $staticAnalysisToolOptions,
             $filter,
             $commandHelper->getThreadCount(),
             // To keep in sync with Container::DEFAULT_DRY_RUN

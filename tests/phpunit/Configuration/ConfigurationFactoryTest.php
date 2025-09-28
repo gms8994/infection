@@ -127,6 +127,7 @@ final class ConfigurationFactoryTest extends TestCase
             null,
             null,
             null,
+            null,
         ),
         ?string $inputExistingCoveragePath = null,
         ?string $inputInitialTestsPhpOptions = null,
@@ -143,6 +144,7 @@ final class ConfigurationFactoryTest extends TestCase
         ?string $inputStaticAnalysisTool = null,
         ?string $inputTestFramework = null,
         ?string $inputTestFrameworkExtraOptions = null,
+        ?string $inputStaticAnalysisToolOptions = null,
         string $inputFilter = '',
         int $inputThreadsCount = 1,
         bool $inputDryRun = false,
@@ -171,6 +173,7 @@ final class ConfigurationFactoryTest extends TestCase
         ?string $expectedInitialTestsPhpOptions = null,
         bool $expectedSkipInitialTests = false,
         string $expectedTestFrameworkExtraOptions = '',
+        ?string $expectedStaticAnalysisToolOptions = null,
         ?string $expectedCoveragePath = null,
         bool $expectedSkipCoverage = false,
         bool $expectedDebug = false,
@@ -215,6 +218,7 @@ final class ConfigurationFactoryTest extends TestCase
                 $inputMutators,
                 $inputTestFramework,
                 $inputTestFrameworkExtraOptions,
+                $inputStaticAnalysisToolOptions,
                 $inputFilter,
                 $inputThreadsCount,
                 $inputDryRun,
@@ -251,6 +255,7 @@ final class ConfigurationFactoryTest extends TestCase
             $expectedBootstrap,
             $expectedInitialTestsPhpOptions,
             $expectedTestFrameworkExtraOptions,
+            $expectedStaticAnalysisToolOptions,
             normalizePath($expectedCoveragePath),
             $expectedSkipCoverage,
             $expectedSkipInitialTests,
@@ -294,6 +299,7 @@ final class ConfigurationFactoryTest extends TestCase
             null,
             null,
             null,
+            null,
             StaticAnalysisToolTypes::PHPSTAN,
         );
 
@@ -321,6 +327,7 @@ final class ConfigurationFactoryTest extends TestCase
                 2,
                 '',
                 TestFrameworkTypes::PHPUNIT,
+                null,
                 null,
                 '',
                 0,
@@ -739,6 +746,30 @@ final class ConfigurationFactoryTest extends TestCase
             '--debug',
         );
 
+        yield 'test no static analysis tool options' => self::createValueForStaticAnalysisToolOptions(
+            null,
+            null,
+            null,
+        );
+
+        yield 'test static analysis tool options from config' => self::createValueForStaticAnalysisToolOptions(
+            '--memory-limit=-1',
+            null,
+            '--memory-limit=-1',
+        );
+
+        yield 'test static analysis tool options from input' => self::createValueForStaticAnalysisToolOptions(
+            null,
+            '--memory-limit=-1',
+            '--memory-limit=-1',
+        );
+
+        yield 'test static analysis tool options from config & input' => self::createValueForStaticAnalysisToolOptions(
+            '--level=max',
+            '--memory-limit=-1',
+            '--memory-limit=-1',
+        );
+
         yield 'PHPUnit test framework' => self::createValueForTestFrameworkKey(
             'phpunit',
             '--debug',
@@ -870,6 +901,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
                 5,
                 null,
             ),
@@ -920,6 +952,7 @@ final class ConfigurationFactoryTest extends TestCase
                 __DIR__ . '/../Fixtures/Files/bootstrap/bootstrap.php',
                 '-d zend_extension=wrong_xdebug.so',
                 '--debug',
+                '--memory-limit=-1',
                 'max',
                 'phpstan',
             ),
@@ -985,6 +1018,7 @@ final class ConfigurationFactoryTest extends TestCase
             'expectedInitialTestsPhpOptions' => '-d zend_extension=xdebug.so',
             'expectedSkipInitialTests' => false,
             'expectedTestFrameworkExtraOptions' => '--stop-on-failure',
+            'expectedStaticAnalysisToolOptions' => '--memory-limit=-1',
             'expectedCoveragePath' => '/path/to/dist/coverage',
             'expectedSkipCoverage' => true,
             'expectedDebug' => true,
@@ -1033,6 +1067,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
             ),
             'expectedMutators' => (static fn (): array => [
                 'CustomMutator' => new CustomMutator(),
@@ -1064,6 +1099,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
             ),
             'expectedTimeout' => $expectedTimeout,
         ];
@@ -1086,6 +1122,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 [],
+                null,
                 null,
                 null,
                 null,
@@ -1127,6 +1164,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 [],
+                null,
                 null,
                 null,
                 null,
@@ -1228,6 +1266,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
             ),
         ];
     }
@@ -1252,6 +1291,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 [],
+                null,
                 null,
                 null,
                 null,
@@ -1288,6 +1328,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
             ),
         ];
     }
@@ -1312,6 +1353,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 $minCoveredMsiFromSchemaConfiguration,
                 [],
+                null,
                 null,
                 null,
                 null,
@@ -1350,6 +1392,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
             ),
         ];
     }
@@ -1373,6 +1416,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 [],
                 TestFrameworkTypes::PHPUNIT,
+                null,
                 null,
                 null,
                 null,
@@ -1410,6 +1454,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
             ),
         ];
     }
@@ -1442,6 +1487,38 @@ final class ConfigurationFactoryTest extends TestCase
                 $configTestFrameworkExtraOptions,
                 null,
                 null,
+                null,
+            ),
+        ];
+    }
+
+    private static function createValueForStaticAnalysisToolOptions(
+        ?string $configStaticAnalysisToolOptions,
+        ?string $inputStaticAnalysisToolOptions,
+        ?string $expectedStaticAnalysisToolOptions,
+    ): array {
+        return [
+            'inputStaticAnalysisToolOptions' => $inputStaticAnalysisToolOptions,
+            'expectedStaticAnalysisToolOptions' => $expectedStaticAnalysisToolOptions,
+            'schema' => new SchemaConfiguration(
+                '/path/to/infection.json',
+                null,
+                new Source([], []),
+                Logs::createEmpty(),
+                '',
+                new PhpUnit(null, null),
+                new PhpStan(null, null),
+                null,
+                null,
+                null,
+                [],
+                null,
+                null,
+                null,
+                null,
+                $configStaticAnalysisToolOptions,
+                null,
+                null,
             ),
         ];
     }
@@ -1468,6 +1545,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 [],
                 $configTestFramework,
+                null,
                 null,
                 null,
                 null,
@@ -1511,6 +1589,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 null,
+                null,
             ),
         ];
     }
@@ -1536,6 +1615,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 $configMutators,
+                null,
                 null,
                 null,
                 null,
@@ -1593,6 +1673,7 @@ final class ConfigurationFactoryTest extends TestCase
                 null,
                 null,
                 [],
+                null,
                 null,
                 null,
                 null,
