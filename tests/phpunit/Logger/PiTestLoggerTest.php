@@ -40,7 +40,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-#[Group('default')]
+#[Group('integration')]
 #[CoversClass(PiTestLogger::class)]
 final class PiTestLoggerTest extends TestCase
 {
